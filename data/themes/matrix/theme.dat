@@ -1,0 +1,84 @@
+[general]
+name=Matrix
+
+[colors]
+
+# Values and names are from: https://www.schemecolor.com/matrix-code-green.php
+vampire_black            = #0d0208ff
+# This one is just called "Dark green" in the link.
+dark_matrix_green        = #003B00ff
+islamic_green            = #008F11ff
+malachite                = #00FF41ff
+
+# Screen colors
+main_menu_background     = vampire_black
+about_dialog_background  = vampire_black
+map_background           = vampire_black
+#options_background       = vampire_black
+options_background       = black
+singularity_title        = islamic_green
+hidden_state_menu       = vampire_black
+
+# Game menu dialog
+simple_menu_background     = dark_matrix_green
+simple_menu_border         = malachite
+
+# Pane colors
+pane_background          = vampire_black
+pane_background_empty    = vampire_black
+
+# Dialog colors
+text_dialog_background   = vampire_black
+text_dialog_border       = malachite
+
+# Widget colors
+widget_background          = dark_matrix_green
+widget_border              = malachite
+
+# Text colors
+text_background            = dark_matrix_green
+text_background_unselected = vampire_black
+text_background_selected   = dark_matrix_green
+text_border                = malachite
+text                       = malachite
+
+# Progress colors
+progress_background_unselected = vampire_black
+progress_background_selected   = dark_matrix_green
+progress_background_progress   = islamic_green
+progress_border                = vampire_black
+
+# Slider colors
+slider_background = vampire_black
+slider_background_slider = islamic_green
+slider_border = malachite
+
+# Scrollbar colors
+scrollbar_background = vampire_black
+scrollbar_background_slider = dark_matrix_green
+scrollbar_border = malachite
+scrollbar_arrow_background_selected = islamic_green
+scrollbar_arrow_background_unselected = vampire_black
+
+# Danger colors
+danger_level_0      = dark_matrix_green
+danger_level_1      = dark_matrix_green
+danger_level_2      = islamic_green
+danger_level_3      = malachite
+
+# CPU display colors
+cpu_normal      = malachite
+cpu_warning     = dark_matrix_green
+
+# Save colors
+save_valid      = dark_matrix_green
+save_invalid    = malachite
+
+# Base state colors
+base_state_active          = green
+base_state_sleep           = yellow
+base_state_overclocked     = orange
+base_state_suicide         = red
+base_state_stasis          = gray
+base_state_entering_stasis = gray
+base_state_leaving_stasis  = gray
