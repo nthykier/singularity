@@ -23,6 +23,8 @@ from __future__ import absolute_import
 from operator import truediv
 from code import g
 from code import prerequisite
+from code.py3compat import long_ as long
+
 
 cash, cpu, labor = range(3)
 

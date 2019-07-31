@@ -20,18 +20,12 @@
 
 from __future__ import absolute_import
 
-try:
-    # PY3 compat
-    from configparser import RawConfigParser
-except ImportError:
-    from ConfigParser import RawConfigParser
-
-
 import os
 import sys
 import collections
 from io import open
 
+from code.py3compat import RawConfigParser
 from code import g, i18n
 from code import dirs
 from code import group, base, tech, item, event, location, difficulty, task, region

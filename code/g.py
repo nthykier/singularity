@@ -32,6 +32,7 @@ import sys
 import locale
 
 from code import statistics
+from code.py3compat import unicode_ as unicode
 
 
 stats = statistics.Statistics()

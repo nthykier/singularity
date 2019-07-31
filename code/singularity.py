@@ -25,6 +25,7 @@ from __future__ import absolute_import
 from io import open
 import sys
 from code import g, dirs
+from code.py3compat import SafeConfigParser
 
 
 # Manually "pre-parse" command line arguments for -s|--singledir and --multidir,
@@ -54,7 +55,6 @@ except ValueError:
 except ImportError:
     raise SystemExit("Endgame: Singularity requires pygame.")
 
-import ConfigParser
 import os.path
 import optparse
 import logging
@@ -86,7 +86,7 @@ save_loc = dirs.get_readable_file_in_dirs("prefs.dat", "pref")
 
 if save_loc is not None:
 
-    prefs = ConfigParser.SafeConfigParser()
+    prefs = SafeConfigParser()
     try:
         with open(save_loc, "r", encoding='utf-8') as savefile:
             prefs.readfp(savefile)
