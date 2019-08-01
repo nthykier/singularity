@@ -45,7 +45,7 @@ def set_theme(key, force_reload=False):
         except StopIteration:
             pass
 
-    elif isinstance(key, basestring):
+    elif isinstance(key, str):
         try:
             theme = themes[key]
         except KeyError:
