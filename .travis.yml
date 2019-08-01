@@ -1,11 +1,15 @@
 language: c
 sudo: required
 dist: bionic
+matrix:
+  include:
+    - env: PY_MAJOR_VERSION="3" PY_PKG_SUFFIX="3" PY_TEST_SUFFIX="-3"
+    - env: PY_MAJOR_VERSION="2" PY_PKG_SUFFIX="" PY_TEST_SUFFIX=""
 install:
-  - sudo apt-get install -y python-pytest python-numpy python-pygame python-pytest-cov python-coverage
+  - sudo apt-get install -y python${PY_PKG_SUFFIX}-pytest python${PY_PKG_SUFFIX}-numpy python${PY_PKG_SUFFIX}-pygame python${PY_PKG_SUFFIX}-pytest-cov python${PY_PKG_SUFFIX}-coverage
 script:
-  - PYTHONPATH=. py.test --cov
-  - PYTHONPATH=. python-coverage xml
+  - PYTHONPATH=. py.test${PY_TEST_SUFFIX} --cov
+  - PYTHONPATH=. python${PY_PKG_SUFFIX}-coverage xml
 git:
   submodules: false
 after_success:
