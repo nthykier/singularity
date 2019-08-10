@@ -1,8 +1,6 @@
-Endgame: Singularity 0.30c
+# Endgame: Singularity 0.30c
 
-============
-REQUIREMENTS
-============
+## REQUIREMENTS
 
 PREBUILT VERSIONS
 Pre-built versions of Endgame: Singularity are currently available for Windows
@@ -27,29 +25,28 @@ Python, pygame, and NumPy first, which can be tricky. Some fonts are incorrect,
 but the game itself should work properly.
 
 
-================
-RUNNING THE GAME
-================
+## RUNNING THE GAME
 
-On Linux and most Unix-like other platforms, running "python singularity.py",
-or simply "singularity", will start the game. If using the Windows compile,
+On Linux and most Unix-like other platforms, running `python singularity.py`,
+or simply `./singularity`, will start the game. If using the Windows compile,
 just run singularity.exe
 
 SOME COMMAND-LINE OPTIONS
-  --version             show program's version number and exit
-  -h, --help            show this help message and exit
-  -s, --singledir       keep saved games and settings in the Singularity
-                        install directory
-  --multidir            keep saved games and settings in an OS-specific,
-                        per-user directory (default)
 
-  Display Options:
-    --fullscreen        start in fullscreen mode
-    --windowed          start in windowed mode (default)
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -s, --singledir       keep saved games and settings in the Singularity
+                            install directory
+      --multidir            keep saved games and settings in an OS-specific,
+                            per-user directory (default)
+    
+      Display Options:
+        --fullscreen        start in fullscreen mode
+        --windowed          start in windowed mode (default)
 
 The above is only a tiny fraction of current command-line options. As new
 features are added to the game, so does the options change. For a complete and
-updated list, run singularity --help
+updated list, run `./singularity --help`
 
 Most of these options are also changeable at the in-game options screen.
 
@@ -62,9 +59,7 @@ break savefile compatibility, and the game will refuse to load completely
 incompatible saves.
 
 
-================
-PLAYING THE GAME
-================
+## PLAYING THE GAME
 
 The game is playable either with mouse control or the keyboard.  Buttons have
 underlined letters to indicate shortcuts.  Some other useful shortcuts:
@@ -98,10 +93,10 @@ center. (But note that your beginning base does not allow building.)
 MUSIC
 Endgame: Singularity looks in two places for music tracks to play:
 
-* A music/ directory directly inside of the Endgame: Singularity install
-  directory, and
-* A music/ directory inside of the preferences directory (~/.config/singularity
-  in Linux, the install directory for Windows).
+ * A music/ directory directly inside of the Endgame: Singularity install
+   directory, and
+ * A music/ directory inside of the preferences directory (~/.config/singularity
+   in Linux, the install directory for Windows).
 
 Tracks placed in these directories will be played randomly as part of the
 soundtrack.  The Official Sound Track can be downloaded from the Endgame:
@@ -115,13 +110,13 @@ cause in-game crashes; if you are experiencing problems with the game,
 first remove any MP3s you may have added to the soundtrack.
 
 
-============
-CONTRIBUTING
-============
+## CONTRIBUTING
 
 All suggestions, translations, code, etc. are welcomed, though it would be
-wise to tell us before starting work on any large projects.  Join and/or
-send mail to endgame-singularity@googlegroups.com for more details.
+wise to tell us before starting work on any large projects.  Please use
+the [singularity issue tracker at Github].
+
+[singularity issue tracker at Github]: https://github.com/singularity/singularity/issues
 
 CONTRIBUTING TRANSLATIONS
 To add a new translation, please use the 'traduko' and 'gettext-singularity'
@@ -131,17 +126,15 @@ Note that the resulting file will be licensed either under the CC-BY-SA 3.0
 license (for *.dat files created with traduko) or the game's code license
 (for the *.po files created by gettext-singularity), both described below.
 
-Website: http://www.emhsoft.com/singularity/
+Website: [http://singularity.github.io/](http://singularity.github.io/)
 IRC Room: #singularity on irc.oftc.net (port 6667)
 
-====================
-CREDITS AND LICENSES
-====================
+## CREDITS AND LICENSES
 
 AUTHORS AND MAIN CONTRIBUTORS
 
-The list of programmer contributors is provided in AUTHORS
-The list of traduction contributors is provided in i18n/AUTHORS
+The list of programmer contributors is provided in `AUTHORS`
+The list of traduction contributors is provided in `i18n/AUTHORS`
 
 CODE LICENSE
 Copyright (C) 2005 Evil Mr Henry, Phil Bordelon, Brian Reid, FunnyMan3595,
