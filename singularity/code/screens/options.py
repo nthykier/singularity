@@ -55,25 +55,29 @@ class OptionsScreen(dialog.FocusDialog, dialog.YesNoDialog):
         self.tabs_buttons = button.ButtonGroup()
 
         self.general_tab = OptionButton(self, (-.20, .01), (-.20, .05),
-                                         anchor = constants.TOP_CENTER,
-                                         autohotkey=True,
-                                         function=self.set_tabs_pane, args=(self.general_pane,))
+                                        text=i18n.StaticTranslatableString(N_('&General')),
+                                        anchor=constants.TOP_CENTER,
+                                        autohotkey=True,
+                                        function=self.set_tabs_pane, args=(self.general_pane,))
         self.tabs_buttons.add(self.general_tab)
 
         self.video_tab = OptionButton(self, (-.40, .01), (-.20, .05),
-                                         anchor = constants.TOP_CENTER,
-                                         autohotkey=True,
-                                         function=self.set_tabs_pane, args=(self.video_pane,))
+                                      text=i18n.StaticTranslatableString(N_('&Video')),
+                                      anchor=constants.TOP_CENTER,
+                                      autohotkey=True,
+                                      function=self.set_tabs_pane, args=(self.video_pane,))
         self.tabs_buttons.add(self.video_tab)
 
         self.audio_tab = OptionButton(self, (-.60, .01), (-.20, .05),
-                                       anchor = constants.TOP_CENTER,
-                                       autohotkey=True,
-                                       function=self.set_tabs_pane, args=(self.audio_pane,))
+                                      text=i18n.StaticTranslatableString(N_('&Audio')),
+                                      anchor=constants.TOP_CENTER,
+                                      autohotkey=True,
+                                      function=self.set_tabs_pane, args=(self.audio_pane,))
         self.tabs_buttons.add(self.audio_tab)
         
         self.gui_tab = OptionButton(self, (-.80, .01), (-.202, .05),
-                                    anchor = constants.TOP_CENTER,
+                                    text=i18n.StaticTranslatableString(N_('&Interface')),
+                                    anchor=constants.TOP_CENTER,
                                     autohotkey=True,
                                     function=self.set_tabs_pane, args=(self.gui_pane,))
         self.tabs_buttons.add(self.gui_tab)
@@ -85,12 +89,12 @@ class OptionsScreen(dialog.FocusDialog, dialog.YesNoDialog):
         self.yes_button.size = (.15, .05)
         self.no_button.size = (.15, .05)
 
+    def on_reload_translations(self):
+        for tab in self.tabs_panes:
+            tab.needs_redraw = True
+        self.needs_redraw = True
+
     def rebuild(self):
-        self.general_tab.text               = _("&General")
-        self.video_tab.text                 = _("&Video")
-        self.audio_tab.text                 = _("&Audio")
-        self.gui_tab.text                   = _("&Interface")
-        
         self.general_pane.needs_rebuild     = True
         self.audio_pane.needs_rebuild       = True
 
@@ -174,6 +178,7 @@ class GeneralPane(widget.Widget):
         super(GeneralPane, self).__init__(*args, **kwargs)
 
         self.language_label = text.Text(self, (.01, .01), (.14, .05),
+                                        text=i18n.StaticTranslatableString(N_('Language:')),
                                         align=constants.LEFT,
                                         background_color="clear")
 
@@ -193,8 +198,6 @@ class GeneralPane(widget.Widget):
                                   list_pos=theme.get_theme_pos())
 
     def rebuild(self):
-        self.language_label.text            = _("Language:")
-        
         self.theme_choice.list = theme.get_theme_list()
 
         super(GeneralPane, self).rebuild()
@@ -223,10 +226,11 @@ class GeneralPane(widget.Widget):
 class VideoPane(widget.Widget):
     def __init__(self, *args, **kwargs):
         super(VideoPane, self).__init__(*args, **kwargs)
-        
+
         self.resolution_initialized = False
         
         self.resolution_label = text.Text(self, (.01, .01), (.14, .05),
+                                          text=i18n.StaticTranslatableString(N_('Resolution:')),
                                           align=constants.LEFT,
                                           background_color="clear")
 
@@ -235,6 +239,7 @@ class VideoPane(widget.Widget):
                                   update_func=self.update_resolution)
 
         self.resolution_custom = OptionButton(self, (.01, .28), (.14, .05),
+                                              text=i18n.StaticTranslatableString(N_('&CUSTOM')),
                                               autohotkey=True,
                                               function=self.set_resolution_custom)
 
@@ -260,6 +265,7 @@ class VideoPane(widget.Widget):
                               background_color=(0,0,50,255))
 
         self.fullscreen_label = button.HotkeyText(self, (.40, .01), (.30, .05),
+                                                  text=i18n.StaticTranslatableString(N_('&Fullscreen:')),
                                                   autohotkey=True,
                                                   align=constants.LEFT,
                                                   background_color="clear")
@@ -271,6 +277,7 @@ class VideoPane(widget.Widget):
         self.fullscreen_label.hotkey_target = self.fullscreen_toggle
 
         self.daynight_label = button.HotkeyText(self, (.40, .08), (.30, .05),
+                                                text=i18n.StaticTranslatableString(N_('Da&y/night display:')),
                                                 autohotkey=True,
                                                 align=constants.LEFT,
                                                 background_color="clear")
@@ -282,6 +289,7 @@ class VideoPane(widget.Widget):
         self.daynight_label.hotkey_target = self.daynight_toggle
 
         self.grab_label = button.HotkeyText(self, (.40, .15), (.30, .05),
+                                            text=i18n.StaticTranslatableString(N_('&Mouse grab:')),
                                             autohotkey=True,
                                             align=constants.LEFT,
                                             background_color="clear")
@@ -293,12 +301,6 @@ class VideoPane(widget.Widget):
         self.grab_label.hotkey_target = self.grab_toggle
 
     def rebuild(self):
-        self.fullscreen_label.text          = _("&Fullscreen:")
-        self.grab_label.text                = _("&Mouse grab:")
-        self.daynight_label.text            = _("Da&y/night display:")
-        self.resolution_label.text          = _("Resolution:")
-        self.resolution_custom.text         = _("&CUSTOM")
-        
         self.update_resolution_list()
         
         if gg.fullscreen:
@@ -420,12 +422,14 @@ class AudioPane(widget.Widget):
         super(AudioPane, self).__init__(*args, **kwargs)
 
         self.sound_label = button.HotkeyText(self, (-.49, .01), (.10, .05),
-                                             anchor = constants.TOP_RIGHT,
+                                             text=i18n.StaticTranslatableString(N_('&Sound:')),
+                                             anchor=constants.TOP_RIGHT,
                                              align=constants.LEFT,
                                              autohotkey=True,
                                              background_color="clear")
         self.sound_toggle = OptionButton(self, (-.51, .01), (.07, .05),
-                                         anchor = constants.TOP_LEFT,
+                                         text=self._bool_as_translatable_yesno(not mixer.nosound),
+                                         anchor=constants.TOP_LEFT,
                                          text_shrink_factor=.75,
                                          force_underline=-1,
                                          function=self.set_sound,
@@ -433,9 +437,10 @@ class AudioPane(widget.Widget):
         self.sound_label.hotkey_target = self.sound_toggle
 
         self.gui_label = text.Text(self, (.01, .08), (.22, .05),
-                                     anchor = constants.TOP_LEFT,
-                                     align=constants.LEFT,
-                                     background_color="clear")
+                                   text=i18n.StaticTranslatableString(N_('GUI Volume:')),
+                                   anchor=constants.TOP_LEFT,
+                                   align=constants.LEFT,
+                                   background_color="clear")
         self.gui_slider = slider.UpdateSlider(self, (.24, .08), (.53, .05),
                                               anchor = constants.TOP_LEFT,
                                               horizontal=True, priority=150,
@@ -443,50 +448,43 @@ class AudioPane(widget.Widget):
         self.gui_slider.update_func = self.on_gui_volume_change
 
         self.music_label = text.Text(self, (.01, .15), (.22, .05),
-                                     anchor = constants.TOP_LEFT,
+                                     text=i18n.StaticTranslatableString(N_('Music Volume:')),
+                                     anchor=constants.TOP_LEFT,
                                      align=constants.LEFT,
                                      background_color="clear")
         self.music_slider = slider.UpdateSlider(self, (.24, .15), (.53, .05),
-                                                anchor = constants.TOP_LEFT,
+                                                anchor=constants.TOP_LEFT,
                                                 horizontal=True, priority=150,
                                                 slider_max=100, slider_size=5)
         self.music_slider.update_func = self.on_music_volume_change
 
         self.soundbuf_label = text.Text(self, (.01, .22), (.25, .05),
-                                        text=_("Sound buffering:"),
+                                        text=i18n.StaticTranslatableString(N_("Sound buffering:")),
                                         align=constants.LEFT,
                                         background_color="clear")
         self.soundbuf_group = button.ButtonGroup()
 
         self.soundbuf_low = OptionButton(self, (.24, .22), (.14, .05),
-                                         text=_("&LOW"), autohotkey=True,
+                                         text=i18n.StaticTranslatableString(N_("&LOW")),
+                                         autohotkey=True,
                                          function=self.set_soundbuf,
                                          args=(1024,))
         self.soundbuf_group.add(self.soundbuf_low)
 
         self.soundbuf_normal = OptionButton(self, (.42, .22), (.17, .05),
-                                            text=_("&NORMAL"), autohotkey=True,
+                                            text=i18n.StaticTranslatableString(N_("&NORMAL")),
+                                            autohotkey=True,
                                             function=self.set_soundbuf,
                                             args=(1024*2,))
         self.soundbuf_group.add(self.soundbuf_normal)
 
         self.soundbuf_high = OptionButton(self, (.63, .22), (.14, .05),
-                                          text=_("&HIGH"), autohotkey=True,
+                                          text=i18n.StaticTranslatableString(N_("&HIGH")),
+                                          autohotkey=True,
                                           function=self.set_soundbuf,
                                           args=(1024*4,))
         self.soundbuf_group.add(self.soundbuf_high)
-
-    def rebuild(self):
-        self.sound_label.text = _("&Sound:")
-        self.gui_label.text = _("GUI Volume:")
-        self.music_label.text = _("Music Volume:")
-
-        if not mixer.nosound:
-            self.sound_toggle.text = _("YES")
-        else:
-            self.sound_toggle.text = _("NO")
-
-        super(AudioPane, self).rebuild()
+        i18n.register_on_translation_change_handler(self.on_translation_changed)
 
     def set_options(self, options):
         self.set_sound(options['sound'])
@@ -506,12 +504,17 @@ class AudioPane(widget.Widget):
     def apply_options(self):
         pass
 
-    def set_sound(self, value):
-        if value:
-            self.sound_toggle.text = _("YES")
-        else:
-            self.sound_toggle.text = _("NO")
+    def _bool_as_translatable_yesno(self, value):
+        as_text = N_("YES") if value else N_("NO")
+        v = i18n.StaticTranslatableString(as_text)
+        str(v)
+        return v
 
+    def on_translation_changed(self):
+        self.sound_toggle.text = self._bool_as_translatable_yesno(not mixer.nosound)
+
+    def set_sound(self, value):
+        self.sound_toggle.text = self._bool_as_translatable_yesno(value)
         mixer.set_sound(value)
 
     def on_gui_volume_change(self, value):

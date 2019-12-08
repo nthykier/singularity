@@ -20,8 +20,11 @@
 
 from __future__ import absolute_import
 
+import weakref
+
 import pygame
 
+from singularity.code import i18n
 from singularity.code.graphics import g, widget, constants
 
 
@@ -191,6 +194,16 @@ def resize_redraw(self):
     self.needs_resize = True
     self.needs_redraw = True
 
+
+ALL_TEXT_WIDGETS = weakref.WeakSet()
+
+
+@i18n.register_on_translation_change_handler
+def redraw_text_on_translation_change():
+    for t in ALL_TEXT_WIDGETS:
+        t.on_reload_translations()
+
+
 class Text(widget.BorderedWidget):
     text = widget.call_on_change("_text", resize_redraw)
     shrink_factor = widget.call_on_change("_shrink_factor", resize_redraw)
@@ -224,6 +237,8 @@ class Text(widget.BorderedWidget):
         self.wrap = wrap
         self.bold = bold
         self.text_size = text_size
+
+        ALL_TEXT_WIDGETS.add(self)
 
     max_size = property(lambda self: min(len(self.resolved_base_font)-1,
                                          convert_font_size(self.text_size)))
@@ -350,8 +365,13 @@ class Text(widget.BorderedWidget):
     def redraw(self):
         super(Text, self).redraw()
 
-        if self.text != None:
+        if self.text is not None:
             self.print_text()
+
+    def on_reload_translations(self):
+        # By default, we just trigger a resize/redraw.  Though some widgets are
+        # more involved (e.g. HotkeyText)
+        resize_redraw(self)
 
     def print_text(self):
         # Mark the character to be underlined (if any).

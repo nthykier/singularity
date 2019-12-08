@@ -335,7 +335,10 @@ def hotkey(string):
         nfkd_form = normalize('NFKD', unicode(text))
         return u"".join(c for c in nfkd_form if not combining(c))
 
-    text = string
+    # Force normalization of i18n.StaticTranslatableString into a regular string
+    # (its magic does not work after being shoved through this function and it is
+    # less surprising if it is just demoted to a regular string)
+    text = str(string)
     keys = []
     shift = 0  # counts stripped '&'s, both '&<key>' and '&&'
 

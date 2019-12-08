@@ -22,7 +22,7 @@ from __future__ import absolute_import
 
 import random
 
-from singularity.code import g, base
+from singularity.code import g, base, i18n
 from singularity.code.graphics import text, button, dialog, constants, listbox
 
 import singularity.code.screens.base as basescreen
@@ -51,6 +51,7 @@ class LocationScreen(dialog.Dialog):
 
         self.open_button = \
             button.FunctionButton(self, (0, -.8), (-.3, -.09),
+                                  text=i18n.StaticTranslatableString(N_("&OPEN BASE")),
                                   anchor=constants.TOP_LEFT,
                                   autohotkey=True,
                                   function=self.open_base)
@@ -64,35 +65,43 @@ class LocationScreen(dialog.Dialog):
 
         self.rename_button = \
             button.FunctionButton(self, (-.50, -.8), (-.3, -.09),
+                                  text=i18n.StaticTranslatableString(N_("&RENAME BASE")),
                                   anchor=constants.TOP_CENTER,
                                   autohotkey=True,
                                   function=self.rename_base)
 
         self.power_button = \
             button.FunctionButton(self, (-1, -.8), (-.3, -.09),
+                                  text=i18n.StaticTranslatableString(N_("&POWER STATE")),
                                   anchor=constants.TOP_RIGHT,
                                   autohotkey=True,
                                   function=self.power_state)
 
         self.new_button = \
             button.FunctionButton(self, (0, -.91), (-.3, -.09),
+                                  text=i18n.StaticTranslatableString(N_("&NEW BASE")),
                                   autohotkey=True,
                                   function=self.new_base)
         self.destroy_button = \
             button.FunctionButton(self, (-.50, -.91), (-.3, -.09),
+                                  text=i18n.StaticTranslatableString(N_("&DESTROY BASE")),
                                   anchor=constants.TOP_CENTER,
                                   autohotkey=True,
                                   function=self.destroy_base)
+
         self.back_button = button.ExitDialogButton(self, (-1, -.9), (-.3, -.09),
+                                                   text=i18n.StaticTranslatableString(N_("&BACK")),
                                                    anchor=constants.TOP_RIGHT,
                                                    autohotkey=True)
 
         self.confirm_destroy = \
             dialog.YesNoDialog(self, (-.5,0), (-.35, -.7),
-                            shrink_factor=.5)
+                               text=i18n.StaticTranslatableString(_("Are you sure you want to destroy this base?")),
+                               shrink_factor=.5)
 
         self.cannot_destroy_last_base = \
             dialog.MessageDialog(self,
+                                 text=i18n.StaticTranslatableString(N_("Destroying my last active base would be suicidal.  I cannot do that.")),
                                  pos=(-.5, 0),
                                  size=(-.35, -.7),
                                  shrink_factor=.5)
@@ -100,7 +109,9 @@ class LocationScreen(dialog.Dialog):
         self.new_base_dialog = NewBaseDialog(self)
         self.location = None
 
-        self.name_dialog = dialog.TextEntryDialog(self)
+        self.name_dialog = dialog.TextEntryDialog(self,
+                                                  text=i18n.StaticTranslatableString(N_("Enter a name for the base")),
+                                                  )
 
         self.base_dialog = basescreen.BaseScreen(self, (0,0),
                                                  anchor=constants.TOP_LEFT)
@@ -188,19 +199,6 @@ class LocationScreen(dialog.Dialog):
         # Rebuild dialogs
         self.confirm_destroy.needs_rebuild = True
         self.base_dialog.needs_rebuild = True
-        
-        # Update dialog translations
-        self.name_dialog.text=_("Enter a name for the base")
-        self.confirm_destroy.text = _("Are you sure you want to destroy this base?")
-        self.cannot_destroy_last_base.text = _("Destroying my last active base would be suicidal.  I cannot do that.")
-
-        # Update buttons translations
-        self.open_button.text = _("&OPEN BASE")
-        self.rename_button.text = _("&RENAME BASE")
-        self.power_button.text = _("&POWER STATE")
-        self.new_button.text = _("&NEW BASE")
-        self.destroy_button.text = _("&DESTROY BASE")
-        self.back_button.text = _("&BACK")
 
         super(LocationScreen, self).rebuild()
 
@@ -264,10 +262,11 @@ class NewBaseDialog(dialog.FocusDialog, dialog.ChoiceDescriptionDialog):
         self.description_pane.size = (-.45, -.75)
 
         self.text_label = text.Text(self, (.01, -.87), (-.25, -.1),
-                                          anchor=constants.BOTTOM_LEFT,
-                                          borders=(constants.TOP, constants.BOTTOM, constants.LEFT),
-                                          shrink_factor=.88,
-                                          background_color="pane_background")
+                                    text=i18n.StaticTranslatableString(N_("Name")),
+                                    anchor=constants.BOTTOM_LEFT,
+                                    borders=(constants.TOP, constants.BOTTOM, constants.LEFT),
+                                    shrink_factor=.88,
+                                    background_color="pane_background")
 
         self.text_field = text.EditableText(self, (-.26, -.87), (-.73, -.1),
                                             anchor=constants.BOTTOM_LEFT,
@@ -277,11 +276,6 @@ class NewBaseDialog(dialog.FocusDialog, dialog.ChoiceDescriptionDialog):
         self.desc_func = self.on_change
 
         self.yes_button.function = self.finish
-
-    def rebuild(self):
-        self.text_label.text = _("Name")
-        
-        super(NewBaseDialog, self).rebuild()
 
     def on_change(self, description_pane, base_type):
         if base_type is not None:

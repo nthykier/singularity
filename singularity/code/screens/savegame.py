@@ -22,7 +22,7 @@ from __future__ import absolute_import
 
 import time
 
-from singularity.code import g, savegame as sv, difficulty
+from singularity.code import g, savegame as sv, difficulty, i18n
 from singularity.code.graphics import dialog, button, text, constants, listbox
 
 from singularity.code.safety import log_func_exc
@@ -42,6 +42,7 @@ class SavegameScreen(dialog.ChoiceDialog):
         self._all_savegames_sorted = []
 
         self.label = text.Text(self, (-.01, -.01), (-.20, -.08),
+                               text=i18n.StaticTranslatableString(N_('Filter: ')),
                                borders=constants.ALL,
                                anchor=constants.TOP_LEFT,
                                base_font="normal")
@@ -52,6 +53,7 @@ class SavegameScreen(dialog.ChoiceDialog):
                                                   base_font="normal")
 
         self.delete_button = button.FunctionButton(self, (-.50,-.99), (-.3,-.1),
+                                                   text=i18n.StaticTranslatableString(N_('Delete')),
                                                    anchor=constants.BOTTOM_CENTER,
                                                    autohotkey=True,
                                                    function=self.delete_savegame)
@@ -166,13 +168,6 @@ class SavegameScreen(dialog.ChoiceDialog):
                 
                 item.time_display.text = tm_str + " | " + gtm_str if tm_str else gtm_str
                 item.difficulty_display.text = dif_str
-
-    def rebuild(self):
-        # Update buttons translations
-        self.delete_button.text = _("Delete")
-        self.label.text = _("Filter: ")
-
-        super(SavegameScreen, self).rebuild()
 
     def reload_savegames(self):
         savegames = sv.get_savegames()

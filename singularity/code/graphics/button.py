@@ -22,6 +22,7 @@ from __future__ import absolute_import
 
 import pygame
 
+from singularity.code import i18n
 from singularity.code.graphics import constants, widget, text, image
 from singularity.code.pycompat import *
 
@@ -35,6 +36,7 @@ class HotkeyText(text.Text):
         self.hotkey = kwargs.pop('hotkey', False)
         self.autohotkey = kwargs.pop('autohotkey', False)
         self.force_underline = kwargs.pop('force_underline', None)
+        self._orig_text = None
 
         super(HotkeyText, self).__init__(*args, **kwargs)
 
@@ -65,8 +67,12 @@ class HotkeyText(text.Text):
 
     @text.setter
     def text(self, value):
-        if self.autohotkey and (value != None):
+        if self.autohotkey and value is not None:
             from singularity.code.g import hotkey
+            if isinstance(value, i18n.StaticTranslatableString):
+                self._orig_text = value
+            else:
+                self._orig_text = None
             parsed_hotkey = hotkey(value)
             self.hotkey = parsed_hotkey['key']
             text.Text.text.fset(self, parsed_hotkey['text'])
@@ -84,6 +90,10 @@ class HotkeyText(text.Text):
         else:
             self.underline = -1
 
+    def on_reload_translations(self):
+        if self._orig_text is not None:
+            self.text = self._orig_text
+
     def rebuild(self):
         old_underline = self.underline
         self.calc_underline()
@@ -91,6 +101,7 @@ class HotkeyText(text.Text):
             self.needs_redraw = True
 
         super(HotkeyText, self).rebuild()
+
 
 class Button(text.SelectableText, HotkeyText):
 

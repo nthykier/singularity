@@ -23,7 +23,7 @@ from __future__ import absolute_import
 import singularity
 from singularity.code.graphics import dialog, button, text, constants
 from singularity.code.screens import map, options, savegame
-from singularity.code import g, difficulty
+from singularity.code import g, difficulty, i18n
 
 
 class MainMenu(dialog.TopDialog):
@@ -38,26 +38,31 @@ class MainMenu(dialog.TopDialog):
         self.map_screen = map.MapScreen(self)
         self.new_game_button = \
             button.FunctionButton(self, (.5, .20), (.25, .08),
+                                  text=i18n.StaticTranslatableString(N_('&NEW GAME')),
                                   autohotkey=True,
                                   anchor=constants.TOP_CENTER,
                                   text_size=28,
                                   function=self.new_game)
         self.load_game_button = \
             button.FunctionButton(self, (.5, .36), (.25, .08),
+                                  text=i18n.StaticTranslatableString(N_('&LOAD GAME')),
                                   autohotkey=True,
                                   anchor=constants.TOP_CENTER,
                                   text_size=28,
                                   function=self.load_game)
         self.options_button = button.DialogButton(self, (.5, .52), (.25, .08),
+                                                  text=i18n.StaticTranslatableString(N_('&OPTIONS')),
                                                   autohotkey=True,
                                                   anchor=constants.TOP_CENTER,
                                                   text_size=28,
                                                   dialog=options.OptionsScreen(self))
         self.quit_button = button.ExitDialogButton(self, (.5, .68), (.25, .08),
-                                         autohotkey=True,
-                                         anchor=constants.TOP_CENTER,
-                                         text_size=28)
+                                                   text=i18n.StaticTranslatableString(N_('&QUIT')),
+                                                   autohotkey=True,
+                                                   anchor=constants.TOP_CENTER,
+                                                   text_size=28)
         self.about_button = button.DialogButton(self, (0, 1), (.13, .04),
+                                                text=i18n.StaticTranslatableString(N_('&ABOUT')),
                                                 autohotkey=True,
                                                 text_size=20,
                                                 anchor=constants.BOTTOM_LEFT,
@@ -90,13 +95,6 @@ class MainMenu(dialog.TopDialog):
                                         exit_code=diff,
                                         default=(diff == None)))
         self.difficulty_dialog.buttons = difficulty_buttons
-
-        # Update buttons translations
-        self.new_game_button.text  = _("&NEW GAME")
-        self.load_game_button.text = _("&LOAD GAME")
-        self.options_button.text   = _("&OPTIONS")
-        self.quit_button.text      = _("&QUIT")
-        self.about_button.text     = _("&ABOUT")
 
         super(MainMenu, self).rebuild()
 

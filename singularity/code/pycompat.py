@@ -35,3 +35,8 @@ except ImportError:
     ConfigParser.read_file = ConfigParser.readfp
     SafeConfigParser.read_file = SafeConfigParser.readfp
     RawConfigParser.read_file = RawConfigParser.readfp
+
+try:
+    from collections import UserString
+except ImportError:
+    from UserString import UserString

@@ -23,7 +23,7 @@ from __future__ import division
 
 from functools import reduce
 
-from singularity.code import g, chance, item, buyable
+from singularity.code import g, chance, item, buyable, i18n
 from singularity.code.buyable import cpu
 from singularity.code.stats import stat
 
@@ -134,6 +134,19 @@ class BaseSpec(buyable.BuyableSpec):
                    _("Maintenance:") + u"\xA0%s\n%s%s\n---\n%s\n%s"
         return template % (self.name, cost, maint, detect, size, self.description, location_message)
 
+
+POWER_STATES = {
+    "active": i18n.StaticTranslatableString(N_("Active")),
+    "sleep": i18n.StaticTranslatableString(N_("Sleep")),
+
+    "overclocked": i18n.StaticTranslatableString(N_("Overclocked")),
+    "suicide": i18n.StaticTranslatableString(N_("Suicide")),
+    "stasis": i18n.StaticTranslatableString(N_("Stasis")),
+    "entering_stasis": i18n.StaticTranslatableString(N_("Entering Stasis")),
+    "leaving_stasis": i18n.StaticTranslatableString(N_("Leaving Stasis")),
+}
+
+
 class Base(buyable.Buyable):
     """A Player's Base in a Location (Open Base in Location menu)"""
 
@@ -199,14 +212,8 @@ class Base(buyable.Buyable):
     def power_state_name(self):
         """A read-only i18'zable version of power_state attribute, suitable for
         printing labels, captions, etc"""
-        if self.power_state == "active"         : return _("Active")
-        if self.power_state == "sleep"          : return _("Sleep")
-        if self.power_state == "overclocked"    : return _("Overclocked")
-        if self.power_state == "suicide"        : return _("Suicide")
-        if self.power_state == "stasis"         : return _("Stasis")
-        if self.power_state == "entering_stasis": return _("Entering Stasis")
-        if self.power_state == "leaving_stasis" : return _("Leaving Stasis")
-        return ""
+
+        return POWER_STATES.get(self.power_state, '')
 
     def space_left_for(self, item_type):
         space_left = self.spec.size

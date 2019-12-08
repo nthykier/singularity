@@ -23,7 +23,7 @@ from __future__ import absolute_import
 from numpy import array, int64
 import pygame
 
-from singularity.code import g, task
+from singularity.code import g, task, i18n
 from singularity.code.graphics import dialog, button, slider, text, constants, listbox
 
 
@@ -49,6 +49,8 @@ class ResearchScreen(dialog.ChoiceDescriptionDialog):
         self.yes_button.parent = None
         self.no_button.pos = (-.5,-.99)
         self.no_button.anchor = constants.BOTTOM_CENTER
+
+        i18n.register_on_translation_change_handler(self.rebuild_list)
 
     def adjust_slider(self, event):
         if 0 <= self.listbox.list_pos < len(self.listbox.list):
@@ -174,9 +176,9 @@ class ResearchScreen(dialog.ChoiceDescriptionDialog):
                                   TEXT=g.dangers[danger_level].research_desc)
         dialog.call_dialog(self.help_dialog, self)
 
-    def show(self):
+    def rebuild_list(self):
         techs = [tech for tech in g.pl.techs.values() if tech.available()
-                                                      and not tech.done]
+                 and not tech.done]
         techs.sort()
         self.list = [_("CPU Pool"), task.get_current("jobs").name] + \
                     [_("Research %s") % tech.name for tech in techs]
@@ -184,4 +186,7 @@ class ResearchScreen(dialog.ChoiceDescriptionDialog):
         self.listbox.key_list = self.key_list
 
         self.dirty_count = True
+
+    def show(self):
+        self.rebuild_list()
         return super(ResearchScreen, self).show()

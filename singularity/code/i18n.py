@@ -26,6 +26,7 @@ from __future__ import absolute_import
 import os
 import sys
 import locale
+import weakref
 
 from singularity.code import g, dirs
 from singularity.code.pycompat import *
@@ -43,6 +44,19 @@ try:
     language = locale.getdefaultlocale()[0] or default_language
 except RuntimeError:
     language = default_language
+
+
+TRANSLATION_CHANGED_HANDLES = []
+
+
+def register_on_translation_change_handler(func):
+    TRANSLATION_CHANGED_HANDLES.append(func)
+    return func
+
+
+def emit_translation_changed_event():
+    for handler in TRANSLATION_CHANGED_HANDLES:
+        handler()
 
 
 def set_language(lang=None, force=False):
@@ -83,6 +97,7 @@ def set_language(lang=None, force=False):
 
     load_messages()
     load_data_str()
+    emit_translation_changed_event()
 
 
 def load_messages():
@@ -158,6 +173,37 @@ def translate(string, *args, **kwargs):
 
     return s
 
+
+# We keep a weak reference to the STS objects to ensure they can be
+# garbage collected
+ALL_STATIC_TRANSLATABLE_STRINGS = weakref.WeakSet()
+
+@register_on_translation_change_handler
+def update_static_translatable_strings():
+    for s in ALL_STATIC_TRANSLATABLE_STRINGS:
+        s.reload_translation()
+
+
+class StaticTranslatableString(UserString):
+
+    def __init__(self, value):
+        self._original_value = value
+        self._translated_value = None
+        ALL_STATIC_TRANSLATABLE_STRINGS.add(self)
+
+    @property
+    def data(self):
+        if self._translated_value is None:
+            self.reload_translation()
+        return self._translated_value
+
+    def format(self, *args, **kwargs):
+        return str(self).format(*args, **kwargs)
+
+    def reload_translation(self):
+        self._translated_value = translate(self._original_value)
+
+
 # Initialization code
 try:
     import builtins
@@ -165,4 +211,5 @@ except ImportError:
     import __builtin__ as builtins
 
 builtins.__dict__['_'] = translate
-
+# Tagging function to enable extraction via xgettext
+builtins.__dict__['N_'] = lambda x: x

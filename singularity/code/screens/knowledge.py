@@ -22,7 +22,7 @@ from __future__ import absolute_import
 
 import pygame
 import collections
-from singularity.code import g
+from singularity.code import g, i18n
 from singularity.code.graphics import text, button, dialog, widget, constants, listbox
 
 
@@ -49,6 +49,7 @@ class KnowledgeScreen(dialog.Dialog):
                                   anchor = constants.TOP_LEFT)
 
         self.back_button = button.ExitDialogButton(self, (0.17, 0.46), (-.3, -.1),
+                                                   text=i18n.StaticTranslatableString(N_("&BACK")),
                                                    anchor=constants.TOP_LEFT,
                                                    autohotkey=True)
 
@@ -82,9 +83,6 @@ class KnowledgeScreen(dialog.Dialog):
 
         self.knowledge_choice.list = list(self.knowledge_types)
         self.knowledge_choice.needs_rebuild = True
-
-        # Update buttons translations
-        self.back_button.text = _("&BACK")
 
         super(KnowledgeScreen, self).rebuild()
 

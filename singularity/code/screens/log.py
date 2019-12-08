@@ -21,7 +21,7 @@
 from __future__ import absolute_import
 
 
-from singularity.code import g, logmessage
+from singularity.code import g, logmessage, i18n
 from singularity.code.graphics import dialog, constants, text, button, listbox
 
 
@@ -35,13 +35,14 @@ class LogScreen(dialog.ChoiceDialog):
         self.yes_button.parent = None
         self.no_button.pos = (-.5,-.99)
         self.no_button.anchor = constants.BOTTOM_CENTER
-        
+
         self.filter_log_dialog = FilterLogDialog(self)
-        
+
         self.filter_log = button.FunctionButton(self, (-1., 0.), (-.15, -.08),
-                                              anchor = constants.TOP_RIGHT,
-                                              autohotkey=True,
-                                              function=self.show_filters)
+                                                text=i18n.StaticTranslatableString(N_('Filters')),
+                                                anchor=constants.TOP_RIGHT,
+                                                autohotkey=True,
+                                                function=self.show_filters)
 
     def make_listbox(self):
         return listbox.Listbox(self, (0, -.09), (-1, -.77),
@@ -62,8 +63,6 @@ class LogScreen(dialog.ChoiceDialog):
         self.key_list = [message for message in g.pl.log if not type(message) in filtered_log_class]
         self.list = [self.render_log_message(message) for message in self.key_list]
         self.default = len(self.list) - 1
-
-        self.filter_log.text = _("Filters")
 
         self.filter_log_dialog.needs_rebuild = True
 

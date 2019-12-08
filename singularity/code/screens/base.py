@@ -21,7 +21,7 @@
 
 import pygame
 
-from singularity.code import g, item, buyable
+from singularity.code import g, item, buyable, i18n
 from singularity.code.graphics import constants, widget, dialog, text, button, slider
 
 state_colors = dict(
@@ -97,6 +97,7 @@ class MultipleBuildDialog(dialog.FocusDialog, BuildDialog):
         self.description_pane.size = (-.45, -.75)
 
         self.count_label = text.Text(self, (.01, -.87), (-.25, -.1),
+                                     text=i18n.StaticTranslatableString(N_("Number of items")),
                                      anchor=constants.BOTTOM_LEFT, valign=constants.MID,
                                      borders=(constants.TOP, constants.BOTTOM, constants.LEFT),
                                      shrink_factor=.88,
@@ -113,11 +114,6 @@ class MultipleBuildDialog(dialog.FocusDialog, BuildDialog):
                                                 horizontal=True, priority=150,
                                                 update_func=self.on_slider_change,
                                                 slider_size=2)
-
-    def rebuild(self):
-        self.count_label.text = _("Number of items")
-
-        super(MultipleBuildDialog, self).rebuild()
 
     @property
     def count(self):

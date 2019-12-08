@@ -24,7 +24,7 @@ from __future__ import absolute_import
 import collections
 import pygame
 
-from singularity.code import g, savegame as sv, mixer
+from singularity.code import g, savegame as sv, mixer, i18n
 from singularity.code import chance, difficulty, logmessage, warning
 from singularity.code.location import Location
 from singularity.code.graphics import g as gg
@@ -379,11 +379,13 @@ class GameMenuDialog(dialog.SimpleMenuDialog):
         super(GameMenuDialog, self).__init__(parent=map_screen)
         self._map_screen = map_screen
         self.options_dialog = OptionsScreen(self)
-        self.savename_dialog = dialog.TextEntryDialog(self)
+        self.savename_dialog = \
+            dialog.TextEntryDialog(self,
+                                   text=i18n.StaticTranslatableString(N_('Enter a name for this save.')),
+                                   )
         self.load_dialog = savegame.SavegameScreen(self,
                                                    (.5,.5), (.75,.75),
                                                    anchor=constants.MID_CENTER)
-
         self._rebuild_menu_buttons()
         self.needs_rebuild = True
 
@@ -409,7 +411,6 @@ class GameMenuDialog(dialog.SimpleMenuDialog):
     def rebuild(self):
         self._rebuild_menu_buttons()
         self.options_dialog.needs_rebuild = True
-        self.savename_dialog.text = _("Enter a name for this save.")
         super(GameMenuDialog, self).rebuild()
 
     def load_game(self):
@@ -483,17 +484,20 @@ class MapScreen(dialog.Dialog):
         widget.unmask_all(self.danger_bar)
 
         self.report_button = button.DialogButton(self, (0, 0.88),
-                                                  (0.15, 0.04),
-                                                  autohotkey=True,
-                                                  dialog=report.ReportScreen(self))
+                                                 (0.15, 0.04),
+                                                 text=i18n.StaticTranslatableString(N_("R&EPORTS")),
+                                                 autohotkey=True,
+                                                 dialog=report.ReportScreen(self))
 
         self.knowledge_button = button.DialogButton(self, (0.85, 0.88),
                                                     (0.15, 0.04),
+                                                    text=i18n.StaticTranslatableString(N_("&KNOWLEDGE")),
                                                     autohotkey=True,
                                                     dialog=knowledge.KnowledgeScreen(self))
 
         self.log_button = button.DialogButton(self, (0.5, 0.88),
                                               (0.15, 0.04),
+                                              text=i18n.StaticTranslatableString(N_("LO&G")),
                                               autohotkey=True,
                                               anchor=constants.TOP_CENTER,
                                               dialog=log.LogScreen(self))
@@ -518,6 +522,7 @@ class MapScreen(dialog.Dialog):
             if exit:
                 raise constants.ExitDialog
         self.menu_button = button.FunctionButton(self, (0, 0), (0.13, 0.04),
+                                                 text=i18n.StaticTranslatableString(N_("&MENU")),
                                                  autohotkey=True,
                                                  function=show_menu)
 
@@ -540,6 +545,7 @@ class MapScreen(dialog.Dialog):
 
         self.research_button = \
             button.DialogButton(self, (.14, 0.05), (0, 0.04),
+                                text=i18n.StaticTranslatableString(N_("&RESEARCH/TASKS")),
                                 autohotkey=True,
                                 dialog=research.ResearchScreen(self))
 
@@ -786,13 +792,6 @@ https://github.com/singularity/singularity
         self.research_button.dialog.needs_rebuild = True
         self.knowledge_button.dialog.needs_rebuild = True
         self.menu_dialog.needs_rebuild = True
-
-        # Update buttons translations
-        self.report_button.text = _("R&EPORTS")
-        self.knowledge_button.text = _("&KNOWLEDGE")
-        self.log_button.text = _("LO&G")
-        self.menu_button.text = _("&MENU")
-        self.research_button.text = _("&RESEARCH/TASKS")
 
         if g.cheater:
             self.cheat_dialog.needs_rebuild = True
